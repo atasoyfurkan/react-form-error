@@ -27,15 +27,6 @@ class App extends Component {
       alert("Successful auth");
   };
 
-  translator = (error) => {
-    if (error === '"password" is not allowed to be empty')
-      return "Don't leave it blank"
-    if (error === '"email" must be a valid email')
-      return "Put a valid email!"
-
-    return error;
-  }
-
   render() {
     return (
       <div className="container col-md-8 col-lg-4 text-center" style={{ marginTop: 120 }}>
