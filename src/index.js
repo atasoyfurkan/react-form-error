@@ -1,73 +1,76 @@
 import React, { Component } from 'react'
 import propTypes from "prop-types"
 import "bootstrap/dist/css/bootstrap.min.css";
+import Joi from "joi-browser";
 
-let openNotification;
 
-export const notify = ({ text = "", variant = "primary" }) => {
-  if (!openNotification) throw new Error("Can't use notify before declaration");
+let data, schema, listeners = {};
 
-  openNotification(text, variant);
-}
-
-export class FormHandler extends Component {
+class FormHandler extends Component {
   static propTypes = {
-    options: propTypes.shape({
-      animation: propTypes.bool,
-      delay: propTypes.number,
-      autohide: propTypes.bool
-    })
+    schema: propTypes.object.isRequired,
+    data: propTypes.object.isRequired,
+    translator: propTypes.func
   };
 
-  state = {
-    show: false,
-    variant: variants["primary"],
-    text: ""
-  };
+  static checkError() {
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(data, schema, options);
+    if (!error) return false;
+
+    for (let item of error.details)
+      listeners[item.path[0]](this.props.translator ? this.props.translator(item.message) : item.message);
+
+    return true;
+  }
 
   componentWillMount() {
-    openNotification = this.open;
+    data = this.props.data;
+    schema = this.props.schema;
   }
 
-  open = (text = "", variant = "primary") => {
-    this.setState({ show: true, text: text, variant: variants[variant] });
+  componentDidUpdate(prevProps) {
+    for (let name in this.props.data) {
+      if (this.props.data[name] !== prevProps.data[name]) {
+        if (!listeners[name]) throw new Error("There is not any data for that key");
+        const error = this.handleError(name);
+        listeners[name](this.props.translator ? this.props.translator(error) : error);
+      }
+    }
+    data = this.props.data;
   }
 
-  onClose = () => {
-    this.setState({ show: false });
+  handleError = (name) => {
+    const obj = { [name]: this.props.data[name] };
+    const schema = { [name]: this.props.schema[name] };
+
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
+  };
+
+  render() { return null }
+}
+
+class Error extends Component {
+  static propTypes = {
+    name: propTypes.string.isRequired
+  };
+
+  state = {};
+
+  componentWillMount() {
+    listeners[this.props.name] = (text) => this.setState({ error: text });
   }
 
   render() {
-    const { options } = this.props;
-    const { show, variant, text } = this.state;
-
-    let animation = false, delay = 4000, autohide = true;
-    if (options) {
-      animation = options.animation || false;
-      delay = options.delay || 4000;
-      autohide = options.autohide || true;
-    }
-
-    return (
-      <div className="d-flex justify-content-center">
-        <Toast
-          style={{
-            background: variant,
-            position: "fixed",
-            bottom: 20,
-            zIndex: 999
-          }}
-          onClose={this.onClose}
-          show={show}
-          animation={animation}
-          delay={delay}
-          autohide={autohide}
-        >
-          <Toast.Header>
-            <strong className="mr-auto">{text}</strong>
-          </Toast.Header>
-        </Toast>
-      </div>
-    );
+    if (this.state.error)
+      return (
+        <div className={"alert alert-danger mt-2 " + this.props.className} style={this.props.style} role="alert">
+          {this.state.error}
+        </div>
+      );
+    else return null;
   }
 }
+
+export { Joi, FormHandler, Error };

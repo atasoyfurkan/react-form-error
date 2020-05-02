@@ -1,10 +1,22 @@
 {
   "name": "react-form-error",
-  "version": "1.0.0",
-  "description": "Simple React error handler for form operations ",
+  "version": "1.0.1",
+  "description": "Simple React error handler for validation of form operations",
   "author": "github.com/atasoyfurkan",
   "license": "MIT",
   "repository": "github.com/atasoyfurkan/react-form-error",
+  "homepage": "github.com/atasoyfurkan/react-form-error",
+  "keywords": [
+    "error",
+    "handler",
+    "form",
+    "react",
+    "validation",
+    "joi",
+    "bootstrap",
+    "alert",
+    "input"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -24,7 +36,9 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
+    "bootstrap": "^4.4.1",
+    "joi-browser": "^13.4.0"
   },
   "devDependencies": {
     "microbundle-crl": "^0.13.8",
@@ -45,9 +59,15 @@
     "prettier": "^2.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.1",
+    "bootstrap": "^4.4.1",
+    "joi-browser": "^13.4.0"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "joi-browser": "^13.4.0"
+  }
 }
