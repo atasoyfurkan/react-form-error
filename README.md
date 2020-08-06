@@ -21,7 +21,7 @@ npm install --save react-form-error
 import React, { Component } from 'react'
 import { Joi, FormHandler, Error } from 'react-form-error'
 
-class App extends Component {
+export default class App extends Component {
   state = {
     name: "",
   };
@@ -62,7 +62,7 @@ class App extends Component {
 import React, { Component } from 'react'
 import { Joi, FormHandler, Error } from 'react-form-error'
 
-class App extends Component {
+export default class App extends Component {
   state = {
     email: "",
     password: ""
@@ -117,6 +117,53 @@ class App extends Component {
 }
 ```
 
+## Customize Error Component
+If you want to customize error component or don't want to render at all. You can take errors manually.
+
+# Example Code
+```jsx
+import React, { Component } from 'react'
+import { Joi, FormHandler } from 'react-form-error'
+
+export default class App extends Component {
+  state = {
+    name: "",
+    nameError: false
+  };
+
+  schema = {
+    name: Joi.string().required()
+  };
+
+  handleChange = async (event) => {
+    await this.setState({ name: event.target.value });
+
+    const errors = FormHandler.takeErrors();
+    this.setState({ nameError: errors["name"] });
+  }
+
+  handleSubmit = () => {
+    const isError = FormHandler.checkError();
+
+    if (!isError)
+      alert("Successful form operation");
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <div className="form-group">
+          <input onChange={this.handleChange} type="name" className="form-control" placeholder="Enter your name" />
+          <span className={`${this.state.nameError ? "d-block" : "d-none"}`}>Error!!!</span>
+        </div>
+        <button onClick={this.handleSubmit} className="btn btn-primary">Submit</button>
+
+        <FormHandler schema={this.schema} data={{ name: this.state.name }} />
+      </React.Fragment>
+    );
+  }
+}
+```
 
 ## Demo
 [Demo](https://atasoyfurkan.github.io/react-form-error/)

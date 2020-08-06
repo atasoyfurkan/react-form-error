@@ -10,7 +10,7 @@ class FormHandler extends Component {
   static propTypes = {
     schema: propTypes.object.isRequired,
     data: propTypes.object.isRequired,
-    translator: propTypes.func
+    translator: propTypes.func,
   };
 
   static checkError() {
@@ -24,6 +24,23 @@ class FormHandler extends Component {
     return true;
   }
 
+  static takeErrors() {
+    if (!data) return;
+
+    let errors = {};
+    for (name in data)
+      errors[name] = false;
+
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(data, schema, options);
+
+    if (error)
+      for (let item of error.details)
+        errors[item.path[0]] = true;
+
+    return errors;
+  }
+
   componentWillMount() {
     data = this.props.data;
     schema = this.props.schema;
@@ -33,9 +50,10 @@ class FormHandler extends Component {
   componentDidUpdate(prevProps) {
     for (let name in this.props.data) {
       if (this.props.data[name] !== prevProps.data[name]) {
-        if (!listeners[name]) throw new Error("There is not any data for that key");
         const error = this.handleError(name);
-        listeners[name](this.props.translator && error ? this.props.translator(error) : error);
+
+        if (listeners[name])
+          listeners[name](this.props.translator && error ? this.props.translator(error) : error);
       }
     }
     data = this.props.data;
