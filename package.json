@@ -1,11 +1,11 @@
 {
   "name": "react-form-error",
-  "version": "1.0.3",
+  "version": "1.0.9",
   "description": "Simple React error handler for validation of form operations",
   "author": "github.com/atasoyfurkan",
   "license": "MIT",
   "repository": "github.com/atasoyfurkan/react-form-error",
-  "homepage": "https://atasoyfurkan.github.io/react-form-error",
+  "homepage": "github.com/atasoyfurkan/react-form-error",
   "keywords": [
     "error",
     "handler",
@@ -26,7 +26,6 @@
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "prepublish": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint .",
@@ -42,21 +41,9 @@
   },
   "devDependencies": {
     "microbundle-crl": "^0.13.8",
-    "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-config-standard-react": "^9.2.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
@@ -64,7 +51,8 @@
     "joi-browser": "^13.4.0"
   },
   "files": [
-    "dist"
+    "dist/index.js",
+    "dist/index.modern.js"
   ],
   "dependencies": {
     "bootstrap": "^4.4.1",

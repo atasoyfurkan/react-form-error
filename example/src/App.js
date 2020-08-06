@@ -40,7 +40,7 @@ class App extends Component {
         </div>
         <button onClick={this.handleSubmit} className="btn btn-primary">Submit</button>
 
-        <FormHandler schema={this.schema} data={{ email: this.state.email, password: this.state.password }} translator={this.translator} />
+        <FormHandler schema={this.schema} data={{ email: this.state.email, password: this.state.password }} />
       </div>
     );
   }

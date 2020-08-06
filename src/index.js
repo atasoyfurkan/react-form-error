@@ -19,7 +19,7 @@ class FormHandler extends Component {
     if (!error) return false;
 
     for (let item of error.details)
-      listeners[item.path[0]](translator ? translator(item.message) : item.message);
+      listeners[item.path[0]](translator && item.message ? translator(item.message) : item.message);
 
     return true;
   }
@@ -35,7 +35,7 @@ class FormHandler extends Component {
       if (this.props.data[name] !== prevProps.data[name]) {
         if (!listeners[name]) throw new Error("There is not any data for that key");
         const error = this.handleError(name);
-        listeners[name](this.props.translator ? this.props.translator(error) : error);
+        listeners[name](this.props.translator && error ? this.props.translator(error) : error);
       }
     }
     data = this.props.data;

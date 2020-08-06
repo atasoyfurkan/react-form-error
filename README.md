@@ -169,6 +169,18 @@ class App extends Component {
     <td>-</td>
     <td>A data name to indicate that which error of input data will shown in the alert box</td>    
   </tr>
+    <tr>
+    <td>className</td>
+    <td>string</td>
+    <td>-</td>
+    <td>Add CSS classes</td>    
+  </tr>
+    <tr>
+    <td>style</td>
+    <td>string</td>
+    <td>-</td>
+    <td>Add style</td>    
+  </tr>
 </table>
 
 className and style properties can be used like a regular html tag.
