@@ -120,7 +120,7 @@ export default class App extends Component {
 ## Customize Error Component
 If you want to customize error component or don't want to render at all. You can take errors manually.
 
-# Example Code
+### Example Code
 ```jsx
 import React, { Component } from 'react'
 import { Joi, FormHandler } from 'react-form-error'
