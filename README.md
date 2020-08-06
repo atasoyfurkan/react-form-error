@@ -151,7 +151,7 @@ class App extends Component {
     <td>translator</td>
     <td>function</td>
     <td>-</td>
-    <td>A callback function to translate Joi default error to whatever you like</td>
+    <td>A pipe function to translate Joi default error to whatever you like</td>
   </tr>
 </table>
 
