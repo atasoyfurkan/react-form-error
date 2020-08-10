@@ -19,7 +19,8 @@ class FormHandler extends Component {
     if (!error) return false;
 
     for (let item of error.details)
-      listeners[item.path[0]](translator && item.message ? translator(item.message) : item.message);
+      if (listeners[item.path[0]])
+        listeners[item.path[0]](translator && item.message ? translator(item.message) : item.message);
 
     return true;
   }
@@ -41,7 +42,7 @@ class FormHandler extends Component {
     return errors;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     data = this.props.data;
     schema = this.props.schema;
     translator = this.props.translator;
