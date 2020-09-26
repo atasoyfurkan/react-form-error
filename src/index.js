@@ -13,35 +13,6 @@ class FormHandler extends Component {
     translator: propTypes.func,
   };
 
-  static checkError() {
-    const options = { abortEarly: false };
-    const { error } = Joi.validate(data, schema, options);
-    if (!error) return false;
-
-    for (let item of error.details)
-      if (listeners[item.path[0]])
-        listeners[item.path[0]](translator && item.message ? translator(item.message) : item.message);
-
-    return true;
-  }
-
-  static takeErrors() {
-    if (!data) return;
-
-    let errors = {};
-    for (name in data)
-      errors[name] = false;
-
-    const options = { abortEarly: false };
-    const { error } = Joi.validate(data, schema, options);
-
-    if (error)
-      for (let item of error.details)
-        errors[item.path[0]] = true;
-
-    return errors;
-  }
-
   componentDidMount() {
     data = this.props.data;
     schema = this.props.schema;
@@ -93,4 +64,33 @@ class Error extends Component {
   }
 }
 
-export { Joi, FormHandler, Error };
+const checkErrors = () => {
+  const options = { abortEarly: false };
+  const { error } = Joi.validate(data, schema, options);
+  if (!error) return false;
+
+  for (let item of error.details)
+    if (listeners[item.path[0]])
+      listeners[item.path[0]](translator && item.message ? translator(item.message) : item.message);
+
+  return true;
+}
+
+const takeErrors = () => {
+  if (!data) return;
+
+  let errors = {};
+  for (name in data)
+    errors[name] = false;
+
+  const options = { abortEarly: false };
+  const { error } = Joi.validate(data, schema, options);
+
+  if (error)
+    for (let item of error.details)
+      errors[item.path[0]] = true;
+
+  return errors;
+}
+
+export { Joi, FormHandler, Error, takeErrors, checkErrors };

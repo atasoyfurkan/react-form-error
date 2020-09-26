@@ -19,7 +19,7 @@ npm install --save react-form-error
 ### Example 1
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler, Error } from 'react-form-error'
+import { Joi, FormHandler, Error, checkErrors } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -35,7 +35,7 @@ export default class App extends Component {
   }
 
   handleSubmit = () => {
-    const isError = FormHandler.checkError();
+    const isError = checkErrors();
 
     if (!isError)
       alert("Successful form operation");
@@ -60,7 +60,7 @@ export default class App extends Component {
 ### Example 2
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler, Error } from 'react-form-error'
+import { Joi, FormHandler, Error, checkErrors } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -82,7 +82,7 @@ export default class App extends Component {
   }
 
   handleSubmit = () => {
-    const isError = FormHandler.checkError();
+    const isError = checkErrors();
 
     if (!isError)
       alert("Successful auth");
@@ -123,7 +123,7 @@ If you want to customize error component or don't want to render at all. You can
 ### Example Code
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler } from 'react-form-error'
+import { Joi, FormHandler, checkErrors, takeErrors } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -138,12 +138,12 @@ export default class App extends Component {
   handleChange = async (event) => {
     await this.setState({ name: event.target.value });
 
-    const errors = FormHandler.takeErrors();
+    const errors = takeErrors();
     this.setState({ nameError: errors["name"] });
   }
 
   handleSubmit = () => {
-    const isError = FormHandler.checkError();
+    const isError = checkError();
 
     if (!isError)
       alert("Successful form operation");

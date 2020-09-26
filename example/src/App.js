@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Joi, FormHandler } from 'react-form-error'
+import { Joi, FormHandler, checkErrors, takeErrors } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -14,12 +14,12 @@ export default class App extends Component {
   handleChange = async (event) => {
     await this.setState({ name: event.target.value });
 
-    const errors = FormHandler.takeErrors();
+    const errors = takeErrors();
     this.setState({ nameError: errors["name"] });
   }
 
   handleSubmit = () => {
-    const isError = FormHandler.checkError();
+    const isError = checkErrors();
 
     if (!isError)
       alert("Successful form operation");
