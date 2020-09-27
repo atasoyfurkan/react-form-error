@@ -204,7 +204,7 @@ export default class App extends Component {
 }
 ```
 
-## Take errors manually
+### Take errors manually with class copmonent
 If you want to customize error component or don't want to render at all. You can take errors manually.
 
 ### Example Code
