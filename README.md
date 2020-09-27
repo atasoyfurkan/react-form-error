@@ -315,6 +315,12 @@ export default class App extends Component {
     <td>-</td>
     <td>Add style</td>    
   </tr>
+      <tr>
+    <td>withStyle</td>
+    <td>boolean</td>
+    <td>false</td>
+    <td>Add bootstrap alert style to error component</td>    
+  </tr>
 </table>
 
 className and style properties can be used like a regular html tag.
