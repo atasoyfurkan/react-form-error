@@ -1,6 +1,7 @@
 # react-form-error
 
-> Simple React error handler for validation of form operations 
+> Simple React error handler hook and class component for validation of form operations 
+
 
 [![NPM](https://img.shields.io/npm/v/react-form-error.svg)](https://www.npmjs.com/package/react-form-error) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -16,10 +17,96 @@ npm install --save react-form-error
 
 ## Usage
 
+## HOOK
+
+### Example 1
+``` jsx
+
+import React, { useState } from "react";
+import { useFormHandler, Joi } from "react-form-error"
+
+const schema = {
+  email: Joi.string().email().required(),
+};
+
+const App = () => {
+  const [email, setEmail] = useState("");
+
+  const { errors, Error, checkErrors } = useFormHandler(schema, { email });
+
+  const handleSubmit = () => {
+    const isError = checkErrors();
+
+    if (!isError) alert("Successfull Auth");
+  }
+
+  return (
+    <>
+      <div className="form-group">
+        <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" placeholder="Enter your email" />
+        <Error name="email" withStyle />
+      </div>
+      <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
+    </>
+  );
+}
+export default App;
+```
+
+### Example 2
+```jsx
+import React, { useState } from "react";
+import { useFormHandler, Joi } from "react-form-error"
+
+const schema = {
+  email: Joi.string().email().required(),
+  password: Joi.string().required().min(2)
+};
+
+const translator = (error) => {
+  if (error === '"password" is not allowed to be empty')
+    return "Don't leave it blank"
+  if (error === '"email" must be a valid email')
+    return "Put a valid email!"
+
+  return error;
+}
+
+const App = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { errors, Error, checkErrors } = useFormHandler(schema, { email, password }, translator);
+
+  console.log(errors);
+
+  const handleSubmit = () => {
+    const isError = checkErrors();
+
+    if (!isError) alert("Successfull Auth");
+  }
+
+  return (
+    <>
+      <div className="form-group">
+        <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" placeholder="Enter your email" />
+        <Error name="email" withStyle />
+        <input onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" placeholder="Enter your password" />
+        <Error name="password" withStyle />
+      </div>
+      <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
+    </>
+  );
+}
+export default App;
+```
+
+## CLASS COMPONENT
+
 ### Example 1
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler, Error, checkErrors } from 'react-form-error'
+import { Joi, FormHandler, Error } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -35,7 +122,7 @@ export default class App extends Component {
   }
 
   handleSubmit = () => {
-    const isError = checkErrors();
+    const isError = FormHandler.checkError();
 
     if (!isError)
       alert("Successful form operation");
@@ -46,7 +133,7 @@ export default class App extends Component {
       <React.Fragment>
         <div className="form-group">
           <input onChange={this.handleChange} type="name" className="form-control" placeholder="Enter your name" />
-          <Error name="name" />
+          <Error name="name" withStyle />
         </div>
         <button onClick={this.handleSubmit} className="btn btn-primary">Submit</button>
 
@@ -60,7 +147,7 @@ export default class App extends Component {
 ### Example 2
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler, Error, checkErrors } from 'react-form-error'
+import { Joi, FormHandler, Error } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -82,7 +169,7 @@ export default class App extends Component {
   }
 
   handleSubmit = () => {
-    const isError = checkErrors();
+    const isError = FormHandler.checkError();
 
     if (!isError)
       alert("Successful auth");
@@ -102,11 +189,11 @@ export default class App extends Component {
       <div className="container col-md-8 col-lg-4 text-center" style={{ marginTop: 120 }}>
         <div className="form-group">
           <input onChange={this.handleChange} type="email" className="form-control" placeholder="Enter email" />
-          <Error name="email" />
+          <Error name="email" withStyle />
         </div>
         <div className="form-group">
           <input onChange={this.handleChange} type="password" className="form-control" placeholder="Password" />
-          <Error name="password" />
+          <Error name="password" withStyle />
         </div>
         <button onClick={this.handleSubmit} className="btn btn-primary">Submit</button>
 
@@ -117,13 +204,13 @@ export default class App extends Component {
 }
 ```
 
-## Customize Error Component
+## Take errors manually
 If you want to customize error component or don't want to render at all. You can take errors manually.
 
 ### Example Code
 ```jsx
 import React, { Component } from 'react'
-import { Joi, FormHandler, checkErrors, takeErrors } from 'react-form-error'
+import { Joi, FormHandler } from 'react-form-error'
 
 export default class App extends Component {
   state = {
@@ -138,12 +225,12 @@ export default class App extends Component {
   handleChange = async (event) => {
     await this.setState({ name: event.target.value });
 
-    const errors = takeErrors();
+    const errors = FormHandler.takeErrors();
     this.setState({ nameError: errors["name"] });
   }
 
   handleSubmit = () => {
-    const isError = checkError();
+    const isError = FormHandler.checkError();
 
     if (!isError)
       alert("Successful form operation");

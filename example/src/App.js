@@ -1,41 +1,57 @@
 import React, { Component } from 'react'
-import { Joi, FormHandler, checkErrors, takeErrors } from 'react-form-error'
+import { Joi, FormHandler, Error } from 'react-form-error'
 
 export default class App extends Component {
   state = {
-    name: "",
-    nameError: false
+    email: "",
+    password: ""
   };
 
   schema = {
-    name: Joi.string().required()
+    email: Joi.string()
+      .required()
+      .email(),
+    password: Joi.string()
+      .required()
+      .min(5)
   };
 
-  handleChange = async (event) => {
-    await this.setState({ name: event.target.value });
-
-    const errors = takeErrors();
-    this.setState({ nameError: errors["name"] });
+  handleChange = (event) => {
+    this.setState({ [event.target.type]: event.target.value });
   }
 
   handleSubmit = () => {
-    const isError = checkErrors();
+    const isError = FormHandler.checkError();
 
     if (!isError)
-      alert("Successful form operation");
+      alert("Successful auth");
   };
+
+  translator = (error) => {
+    if (error === '"password" is not allowed to be empty')
+      return "Don't leave it blank"
+    if (error === '"email" must be a valid email')
+      return "Put a valid email!"
+
+    return error;
+  }
 
   render() {
     return (
-      <React.Fragment>
+      <div className="container col-md-8 col-lg-4 text-center" style={{ marginTop: 120 }}>
         <div className="form-group">
-          <input onChange={this.handleChange} type="name" className="form-control" placeholder="Enter your name" />
-          <span className={`${this.state.nameError ? "d-block" : "d-none"}`}>Error!!!</span>
+          <input onChange={this.handleChange} type="email" className="form-control" placeholder="Enter email" />
+          <Error name="email" withStyle />
+        </div>
+        <div className="form-group">
+          <input onChange={this.handleChange} type="password" className="form-control" placeholder="Password" />
+          <Error name="password" withStyle />
         </div>
         <button onClick={this.handleSubmit} className="btn btn-primary">Submit</button>
 
-        <FormHandler schema={this.schema} data={{ name: this.state.name }} />
-      </React.Fragment>
+        <FormHandler schema={this.schema} data={{ email: this.state.email, password: this.state.password }} translator={this.translator} />
+      </div>
     );
   }
 }
+
