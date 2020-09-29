@@ -1,7 +1,7 @@
 {
   "name": "react-form-error",
-  "version": "1.1.0",
-  "description": "Simple React error handler for validation of form operations",
+  "version": "1.1.1",
+  "description": "Simple React error handler hook and class component for validation of form operations",
   "author": "github.com/atasoyfurkan",
   "license": "MIT",
   "repository": "github.com/atasoyfurkan/react-form-error",

@@ -101,6 +101,41 @@ const App = (props) => {
 export default App;
 ```
 
+### Example 3 (create your own error component)
+```jsx
+import React, { useState } from "react";
+import { useFormHandler, Joi } from "react-form-error"
+
+const schema = {
+  email: Joi.string().email().required(),
+};
+
+const App = () => {
+  const [email, setEmail] = useState("");
+
+  const { errors, checkErrors } = useFormHandler(schema, { email });
+
+  const handleSubmit = () => {
+    const isError = checkErrors();
+
+    if (!isError) alert("Successfull Auth");
+  }
+
+  return (
+    <>
+      <div className="form-group">
+        <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" placeholder="Enter your email" />
+        {errors.email && <span style={{ color: "red" }}>Error!!!</span>}
+      </div>
+      <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
+    </>
+  );
+}
+export default App;
+```
+
+
+
 ## CLASS COMPONENT
 
 ### Example 1
